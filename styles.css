@@ -1,0 +1,19 @@
+.question-card {
+    margin-bottom: 1rem;
+    border-left: 4px solid #007bff;
+}
+
+.answer-section {
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.username {
+    font-weight: bold;
+    color: #0056b3;
+}
