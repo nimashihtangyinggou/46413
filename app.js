@@ -49,6 +49,9 @@ function renderQuestion(questionId, data) {
         </div>
         <div class="answer-section">
             <form class="answer-form mt-3" onsubmit="submitAnswer('${questionId}', event)">
+                <div class="mb-2">
+                    <input type="text" class="form-control" placeholder="您的名字" required>
+                </div>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="寫下您的回答..." required>
                     <button class="btn btn-outline-primary" type="submit">回答</button>
@@ -67,8 +70,11 @@ function renderQuestion(questionId, data) {
                 const answerTimestamp = new Date(parseInt(key)).toLocaleString('zh-TW');
                 const answerHtml = `
                     <div class="answer-item mb-2">
-                        <small class="text-muted">${answerTimestamp}</small>
-                        <p class="mb-1">${data.answers[key]}</p>
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="username me-2">${data.answers[key].username || '匿名'}</span>
+                            <small class="text-muted">${answerTimestamp}</small>
+                        </div>
+                        <p class="mb-1">${data.answers[key].text}</p>
                     </div>
                 `;
                 answersContainer.insertAdjacentHTML('beforeend', answerHtml);
@@ -81,10 +87,16 @@ function renderQuestion(questionId, data) {
 function submitAnswer(questionId, event) {
     event.preventDefault();
     const form = event.target;
-    const answerText = form.querySelector('input').value;
+    const username = form.querySelector('input[placeholder="您的名字"]').value;
+    const answerText = form.querySelector('input[placeholder="寫下您的回答..."]').value;
     const answerTimestamp = Date.now();
     
-    questions.get(questionId).get('answers').get(answerTimestamp).put(answerText);
+    questions.get(questionId).get('answers').get(answerTimestamp).put({
+        username: username,
+        text: answerText,
+        timestamp: answerTimestamp
+    });
+    
     form.reset();
 }
 
